@@ -1,0 +1,2683 @@
+```html
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Smart Email Intelligence</title>
+
+<style>
+
+*{
+    box-sizing:border-box
+}
+
+body{
+    margin:0;
+    font-family:Inter,Arial,sans-serif;
+    background:#f5f7fb;
+    color:#182230
+}
+
+button,input{
+    font:inherit
+}
+
+.app{
+    display:flex;
+    min-height:100vh
+}
+
+
+/* ============================= */
+/* SIDEBAR */
+/* ============================= */
+
+.side{
+    width:245px;
+    background:#111827;
+    color:#dbe4f0;
+    padding:24px 16px;
+    position:fixed;
+    inset:0 auto 0 0
+}
+
+.brand{
+    font-size:21px;
+    font-weight:800;
+    color:white;
+    margin-bottom:35px
+}
+
+.brand span{
+    color:#60a5fa
+}
+
+.nav{
+    display:grid;
+    gap:8px
+}
+
+.nav button{
+    border:0;
+    background:transparent;
+    color:#b8c2d0;
+    text-align:left;
+    padding:12px;
+    border-radius:10px;
+    cursor:pointer
+}
+
+.nav button.active,
+.nav button:hover{
+    background:#1f2937;
+    color:white
+}
+
+
+/* ============================= */
+/* MAIN */
+/* ============================= */
+
+.main{
+    margin-left:245px;
+    width:calc(100% - 245px);
+    padding:26px 34px
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px
+}
+
+.top h1{
+    margin:0;
+    font-size:28px
+}
+
+.sub{
+    color:#718096;
+    margin-top:5px
+}
+
+.actions{
+    display:flex;
+    gap:10px
+}
+
+.btn{
+    border:0;
+    border-radius:9px;
+    padding:11px 15px;
+    cursor:pointer;
+    background:#2563eb;
+    color:white;
+    font-weight:700
+}
+
+.btn.secondary{
+    background:white;
+    color:#334155;
+    border:1px solid #dbe2ea
+}
+
+
+/* ============================= */
+/* SEARCH */
+/* ============================= */
+
+.search{
+    display:flex;
+    gap:10px;
+    background:white;
+    border:1px solid #e1e7ef;
+    padding:10px;
+    border-radius:13px;
+    margin-bottom:20px
+}
+
+.search input{
+    border:0;
+    outline:0;
+    flex:1;
+    padding:5px
+}
+
+
+/* ============================= */
+/* STAT CARDS */
+/* ============================= */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    margin-bottom:20px
+}
+
+.card{
+    background:white;
+    border:1px solid #e5eaf1;
+    border-radius:14px;
+    padding:18px
+}
+
+.label{
+    font-size:12px;
+    color:#718096;
+    text-transform:uppercase;
+    letter-spacing:.05em
+}
+
+.num{
+    font-size:27px;
+    font-weight:800;
+    margin-top:8px
+}
+
+
+/* ============================= */
+/* PANELS */
+/* ============================= */
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 320px;
+    gap:18px
+}
+
+.panel{
+    background:white;
+    border:1px solid #e5eaf1;
+    border-radius:14px;
+    overflow:hidden
+}
+
+.panelhead{
+    padding:17px 18px;
+    border-bottom:1px solid #edf0f4;
+    display:flex;
+    justify-content:space-between
+}
+
+
+/* ============================= */
+/* EMAIL */
+/* ============================= */
+
+.email{
+    padding:15px 18px;
+    border-bottom:1px solid #edf0f4;
+    cursor:pointer
+}
+
+.email:hover{
+    background:#fafcff
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px
+}
+
+.sender{
+    font-weight:750
+}
+
+.subject{
+    margin:5px 0;
+    color:#27364a
+}
+
+.preview{
+    font-size:13px;
+    color:#748094;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width:700px
+}
+
+
+/* ============================= */
+/* CHIPS */
+/* ============================= */
+
+.chips{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-top:8px
+}
+
+.chip{
+    font-size:11px;
+    padding:4px 8px;
+    border-radius:20px;
+    background:#eef2ff;
+    color:#3346a8
+}
+
+.chip.red{
+    background:#fee2e2;
+    color:#b91c1c
+}
+
+.chip.orange{
+    background:#ffedd5;
+    color:#9a3412
+}
+
+.chip.green{
+    background:#dcfce7;
+    color:#166534
+}
+
+.priority{
+    font-weight:800;
+    font-size:13px
+}
+
+
+/* ============================= */
+/* EMPTY */
+/* ============================= */
+
+.empty{
+    padding:40px;
+    text-align:center;
+    color:#7b8797
+}
+
+
+/* ============================= */
+/* SIDE INFORMATION */
+/* ============================= */
+
+.sidebox{
+    padding:16px
+}
+
+.metric{
+    display:flex;
+    justify-content:space-between;
+    padding:11px 0;
+    border-bottom:1px solid #edf0f4
+}
+
+
+/* ============================= */
+/* MODAL */
+/* ============================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px
+}
+
+.modal.open{
+    display:flex
+}
+
+.modalbox{
+    background:white;
+    width:min(900px,95vw);
+    max-height:90vh;
+    overflow:auto;
+    border-radius:16px;
+    padding:24px
+}
+
+.modalbox h2{
+    margin-top:0
+}
+
+.close{
+    float:right;
+    border:0;
+    background:#eef2f7;
+    border-radius:8px;
+    padding:7px;
+    cursor:pointer
+}
+
+
+/* ============================= */
+/* UPLOAD */
+/* ============================= */
+
+.upload{
+    border:2px dashed #cbd5e1;
+    border-radius:12px;
+    padding:22px;
+    text-align:center;
+    margin-top:12px
+}
+
+.small{
+    font-size:12px;
+    color:#64748b
+}
+
+.notice{
+    padding:12px;
+    background:#eff6ff;
+    border-radius:10px;
+    color:#1d4ed8;
+    font-size:13px;
+    margin-top:12px
+}
+
+
+/* ============================= */
+/* PRIORITY VIEW */
+/* ============================= */
+
+.priority-header{
+    padding:22px;
+    background:linear-gradient(135deg,#eff6ff,#f8fafc);
+    border-bottom:1px solid #dbeafe;
+}
+
+.priority-header-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:22px;
+    font-weight:800;
+    color:#1d4ed8;
+}
+
+.priority-header-sub{
+    margin-top:6px;
+    color:#64748b;
+    font-size:13px;
+}
+
+.priority-explanation{
+    margin:18px;
+    padding:15px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+}
+
+.priority-explanation-title{
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+.priority-rank{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#eff6ff;
+    color:#2563eb;
+    font-weight:800;
+    flex-shrink:0;
+}
+
+.priority-score{
+    min-width:70px;
+    text-align:right;
+}
+
+.priority-bar{
+    height:7px;
+    width:140px;
+    background:#e5e7eb;
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:7px;
+}
+
+.priority-fill{
+    height:100%;
+    border-radius:10px;
+    background:#2563eb;
+}
+
+.priority-level{
+    font-size:11px;
+    font-weight:800;
+    margin-top:5px;
+}
+
+.high{
+    color:#dc2626;
+}
+
+.medium{
+    color:#ea580c;
+}
+
+.low{
+    color:#16a34a;
+}
+
+
+/* ============================= */
+/* CONTACT NETWORK */
+/* ============================= */
+
+.network-summary{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    margin:20px 0
+}
+
+.network-stat{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:15px;
+    text-align:center
+}
+
+.network-stat .number{
+    font-size:25px;
+    font-weight:800;
+    margin-top:4px
+}
+
+.network-area{
+    position:relative;
+    min-height:390px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:15px;
+    overflow:auto;
+    padding:25px
+}
+
+.network-title{
+    font-weight:800;
+    margin-bottom:15px
+}
+
+.network-graph{
+    position:relative;
+    min-width:650px;
+    height:330px
+}
+
+.network-node{
+    position:absolute;
+    width:145px;
+    min-height:55px;
+    padding:10px;
+    border-radius:12px;
+    background:white;
+    border:2px solid #2563eb;
+    box-shadow:0 4px 12px rgba(15,23,42,.08);
+    text-align:center;
+    font-size:11px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:2
+}
+
+.network-node.center{
+    border-color:#7c3aed;
+    background:#f5f3ff
+}
+
+.network-node.start{
+    border-color:#16a34a;
+    background:#f0fdf4
+}
+
+.network-line{
+    position:absolute;
+    height:2px;
+    background:#94a3b8;
+    transform-origin:left center;
+    z-index:1
+}
+
+.traversal{
+    margin-top:20px
+}
+
+.traversal-box{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:15px;
+    margin-top:10px;
+    line-height:1.8
+}
+
+.traversal-label{
+    font-weight:800;
+    margin-bottom:6px
+}
+
+.bfs-label{
+    color:#2563eb
+}
+
+.dfs-label{
+    color:#7c3aed
+}
+
+.network-legend{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-top:15px;
+    font-size:12px;
+    color:#64748b
+}
+
+.legend-item{
+    display:flex;
+    align-items:center;
+    gap:6px
+}
+
+.legend-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%
+}
+
+.legend-blue{
+    background:#2563eb
+}
+
+.legend-purple{
+    background:#7c3aed
+}
+
+.legend-green{
+    background:#16a34a
+}
+
+
+/* ============================= */
+/* RECOMMENDATION VIEW */
+/* ============================= */
+
+.recommendation-header{
+    padding:22px;
+    background:linear-gradient(135deg,#f0fdf4,#f8fafc);
+    border-bottom:1px solid #bbf7d0;
+}
+
+.recommendation-title{
+    font-size:22px;
+    font-weight:800;
+    color:#166534;
+}
+
+.recommendation-sub{
+    margin-top:6px;
+    color:#64748b;
+    font-size:13px;
+}
+
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@media(max-width:900px){
+
+    .side{
+        width:190px
+    }
+
+    .main{
+        margin-left:190px;
+        width:calc(100% - 190px)
+    }
+
+    .cards{
+        grid-template-columns:repeat(2,1fr)
+    }
+
+    .grid{
+        grid-template-columns:1fr
+    }
+
+    .preview{
+        max-width:400px
+    }
+
+}
+
+@media(max-width:650px){
+
+    .side{
+        display:none
+    }
+
+    .main{
+        margin:0;
+        width:100%;
+        padding:18px
+    }
+
+    .cards{
+        grid-template-columns:1fr 1fr
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<!-- ============================= -->
+<!-- SIDEBAR -->
+<!-- ============================= -->
+
+<aside class="side">
+
+
+<div class="brand">
+Smart<span>Mail</span> AI
+</div>
+
+
+<div class="nav">
+
+
+<button
+class="active"
+onclick="resetView()"
+>
+📥 Smart Inbox
+</button>
+
+
+<button
+onclick="showSearch()"
+>
+🔎 Search
+</button>
+
+
+<button
+onclick="filterView('spam')"
+>
+🚨 Spam
+</button>
+
+
+<button
+onclick="filterView('duplicates')"
+>
+♻️ Duplicates
+</button>
+
+
+<button
+onclick="sortPriority()"
+>
+⚡ Priority
+</button>
+
+
+<button
+onclick="showNetwork()"
+>
+🕸 Contact Network
+</button>
+
+
+<button
+onclick="showRecommendations()"
+>
+💡 Recommendations
+</button>
+
+
+</div>
+
+
+<div class="notice">
+
+DSA Mode
+
+<br>
+
+<span class="small">
+Trie • KMP • Rabin-Karp • Heap • DP • Graph • LRU
+</span>
+
+</div>
+
+
+</aside>
+
+
+
+<!-- ============================= -->
+<!-- MAIN -->
+<!-- ============================= -->
+
+<main class="main">
+
+
+<div class="top">
+
+
+<div>
+
+<h1 id="pageTitle">
+Smart Inbox
+</h1>
+
+
+<div
+class="sub"
+id="pageSubtitle"
+>
+Algorithmically organized email intelligence
+</div>
+
+
+</div>
+
+
+<div class="actions">
+
+
+<button
+class="btn secondary"
+onclick="openUpload()"
+>
+Upload .eml
+</button>
+
+
+<button
+class="btn"
+onclick="addDemo()"
+>
++ Demo Email
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- SEARCH -->
+
+<div class="search">
+
+
+<span>🔎</span>
+
+
+<input
+id="search"
+placeholder="Search keywords, phrases or subjects..."
+oninput="doSearch()"
+>
+
+
+<button
+class="btn secondary"
+onclick="resetView()"
+>
+Reset
+</button>
+
+
+</div>
+
+
+
+<!-- STATISTICS -->
+
+<div class="cards">
+
+
+<div class="card">
+
+<div class="label">
+Total Emails
+</div>
+
+<div
+class="num"
+id="total"
+>
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
+Spam Detected
+</div>
+
+<div
+class="num"
+id="spam"
+>
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
+Duplicates
+</div>
+
+<div
+class="num"
+id="dupes"
+>
+0
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="label">
+Contacts
+</div>
+
+<div
+class="num"
+id="contacts"
+>
+0
+</div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- CONTENT GRID -->
+
+<div class="grid">
+
+
+<section class="panel">
+
+
+<div class="panelhead">
+
+
+<b id="panelTitle">
+Inbox Analysis
+</b>
+
+
+<span
+class="small"
+id="panelSubtitle"
+>
+Live DSA ranking
+</span>
+
+
+</div>
+
+
+<div id="list">
+
+<div class="empty">
+Loading emails...
+</div>
+
+</div>
+
+
+</section>
+
+
+
+<!-- HOW IT WORKS -->
+
+<aside class="panel">
+
+
+<div class="panelhead">
+
+<b>
+How it works
+</b>
+
+</div>
+
+
+<div class="sidebox">
+
+
+<div class="metric">
+<span>Spam</span>
+<b>HashMap</b>
+</div>
+
+
+<div class="metric">
+<span>Category</span>
+<b>Trie</b>
+</div>
+
+
+<div class="metric">
+<span>Duplicate</span>
+<b>Rabin-Karp</b>
+</div>
+
+
+<div class="metric">
+<span>Priority</span>
+<b>Heap logic</b>
+</div>
+
+
+<div class="metric">
+<span>Similarity</span>
+<b>DP / LCS</b>
+</div>
+
+
+<div class="metric">
+<span>Network</span>
+<b>BFS / DFS</b>
+</div>
+
+
+<div class="metric">
+<span>Search</span>
+<b>KMP + Suffix Array</b>
+</div>
+
+
+<div class="metric">
+<span>Recommend</span>
+<b>LRU + HashMap</b>
+</div>
+
+
+</div>
+
+
+</aside>
+
+
+</div>
+
+
+</main>
+
+
+</div>
+
+
+
+<!-- ============================= -->
+<!-- MODAL -->
+<!-- ============================= -->
+
+<div
+class="modal"
+id="modal"
+>
+
+
+<div class="modalbox">
+
+
+<button
+class="close"
+onclick="closeModal()"
+>
+✕
+</button>
+
+
+<div id="modalContent"></div>
+
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+
+let emails=[];
+
+
+
+/* ============================= */
+/* API HELPER */
+/* ============================= */
+
+async function api(url,opt){
+
+    let r=await fetch(url,opt);
+
+    if(!r.ok)
+
+        throw new Error(await r.text());
+
+    return r.json();
+
+}
+
+
+
+/* ============================= */
+/* LOAD EMAILS */
+/* ============================= */
+
+async function loadEmails(){
+
+    try{
+
+        emails=await api('/api/emails');
+
+        render(emails);
+
+        stats();
+
+        setActiveButton('Smart Inbox');
+
+        document.getElementById('panelTitle').textContent=
+            'Inbox Analysis';
+
+        document.getElementById('panelSubtitle').textContent=
+            'Live DSA ranking';
+
+        document.getElementById('pageTitle').textContent=
+            'Smart Inbox';
+
+        document.getElementById('pageSubtitle').textContent=
+            'Algorithmically organized email intelligence';
+
+    }
+
+    catch(e){
+
+        document.getElementById('list').innerHTML=
+        '<div class="empty">Backend is not running. Start Spring Boot on port 8081.</div>';
+
+    }
+
+}
+
+
+
+/* ============================= */
+/* STATISTICS */
+/* ============================= */
+
+async function stats(){
+
+    try{
+
+        let s=await api('/api/emails/stats');
+
+        for(let k of ['total','spam','dupes','contacts'])
+
+            document.getElementById(k).textContent=s[k]??0;
+
+    }
+
+    catch(e){}
+
+}
+
+
+
+/* ============================= */
+/* NORMAL EMAIL RENDER */
+/* ============================= */
+
+function render(list){
+
+    if(!list.length){
+
+        document.getElementById('list').innerHTML=
+        '<div class="empty">No emails found. Upload an .eml file or add a demo email.</div>';
+
+        return;
+
+    }
+
+
+    document.getElementById('list').innerHTML=
+
+
+    list.map(e=>`
+
+    <div
+    class="email"
+    onclick="openEmail('${e.id}')"
+    >
+
+
+        <div class="row">
+
+
+            <div>
+
+                <div class="sender">
+                ${esc(e.sender)}
+                </div>
+
+
+                <div class="subject">
+                ${esc(e.subject)}
+                </div>
+
+            </div>
+
+
+            <div class="priority">
+            ${e.priority}/100
+            </div>
+
+
+        </div>
+
+
+        <div class="preview">
+        ${esc(e.body||'')}
+        </div>
+
+
+        <div class="chips">
+
+
+            <span class="chip">
+            ${esc(e.category)}
+            </span>
+
+
+            ${
+                e.spam
+                ?
+                '<span class="chip red">SPAM</span>'
+                :
+                ''
+            }
+
+
+            ${
+                e.duplicate
+                ?
+                '<span class="chip orange">DUPLICATE</span>'
+                :
+                ''
+            }
+
+
+            <span class="chip green">
+            DSA ANALYZED
+            </span>
+
+
+        </div>
+
+
+    </div>
+
+    `).join('');
+
+}
+
+
+
+/* ============================= */
+/* ESCAPE HTML */
+/* ============================= */
+
+function esc(x){
+
+    return String(x??'').replace(
+
+        /[&<>'"]/g,
+
+        c=>({
+
+            '&':'&amp;',
+            '<':'&lt;',
+            '>':'&gt;',
+            "'":'&#39;',
+            '"':'&quot;'
+
+        }[c])
+
+    );
+
+}
+
+
+
+/* ============================= */
+/* SEARCH VIEW */
+/* ============================= */
+
+function showSearch(){
+
+    document.getElementById('search').focus();
+
+    document.getElementById('panelTitle').textContent=
+        '🔎 Search Emails';
+
+    document.getElementById('panelSubtitle').textContent=
+        'KMP + Suffix Array';
+
+    document.getElementById('pageTitle').textContent=
+        'Email Search';
+
+    document.getElementById('pageSubtitle').textContent=
+        'Fast keyword and phrase search';
+
+    setActiveButton('Search');
+
+}
+
+
+
+/* ============================= */
+/* SEARCH */
+/* ============================= */
+
+async function doSearch(){
+
+    let q=document.getElementById('search').value.trim();
+
+
+    if(!q){
+
+        resetView();
+
+        return;
+
+    }
+
+
+    try{
+
+        let result=await api(
+            '/api/emails/search?q='+
+            encodeURIComponent(q)
+        );
+
+
+        document.getElementById('panelTitle').textContent=
+            '🔎 Search Results';
+
+        document.getElementById('panelSubtitle').textContent=
+            'KMP + Suffix Array';
+
+
+        document.getElementById('pageTitle').textContent=
+            'Email Search';
+
+        document.getElementById('pageSubtitle').textContent=
+            'Results for: "'+esc(q)+'"';
+
+
+        render(result);
+
+        setActiveButton('Search');
+
+    }
+
+    catch(e){
+
+        document.getElementById('list').innerHTML=
+        '<div class="empty">Unable to perform search.</div>';
+
+    }
+
+}
+
+
+
+/* ============================= */
+/* RESET */
+/* ============================= */
+
+function resetView(){
+
+    document.getElementById('search').value='';
+
+    document.getElementById('panelTitle').textContent=
+        'Inbox Analysis';
+
+    document.getElementById('panelSubtitle').textContent=
+        'Live DSA ranking';
+
+    document.getElementById('pageTitle').textContent=
+        'Smart Inbox';
+
+    document.getElementById('pageSubtitle').textContent=
+        'Algorithmically organized email intelligence';
+
+    render(emails);
+
+    setActiveButton('Smart Inbox');
+
+}
+
+
+
+/* ============================= */
+/* OPEN EMAIL */
+/* ============================= */
+
+async function openEmail(id){
+
+    try{
+
+        let e=await api('/api/emails/'+id);
+
+        let sim=await api('/api/emails/'+id+'/similar');
+
+
+        document.getElementById('modalContent').innerHTML=
+
+
+        `<h2>${esc(e.subject)}</h2>
+
+
+        <p>
+
+        <b>From:</b> ${esc(e.sender)}
+
+        <br>
+
+        <b>To:</b> ${esc(e.recipient)}
+
+        </p>
+
+
+        <div class="chips">
+
+
+        <span class="chip">
+        ${esc(e.category)}
+        </span>
+
+
+        <span class="chip">
+        Priority ${e.priority}/100
+        </span>
+
+
+        ${
+            e.spam
+            ?
+            '<span class="chip red">SPAM</span>'
+            :
+            ''
+        }
+
+
+        ${
+            e.duplicate
+            ?
+            '<span class="chip orange">DUPLICATE</span>'
+            :
+            ''
+        }
+
+
+        </div>
+
+
+        <p style="white-space:pre-wrap;line-height:1.6">
+
+        ${esc(e.body)}
+
+        </p>
+
+
+        <p class="small">
+
+        <b>Detection reason:</b>
+
+        ${esc(e.reason)}
+
+        </p>
+
+
+        <hr>
+
+
+        <h3>Similar Emails (DP)</h3>
+
+
+        ${
+            sim.length
+            ?
+            sim.map(x=>
+
+                `<div class="email">
+
+                <b>${esc(x.subject)}</b>
+
+                <br>
+
+                <span class="small">
+                ${esc(x.sender)}
+                </span>
+
+                </div>`
+
+            ).join('')
+
+
+            :
+
+            '<p class="small">No strong similar emails found.</p>'
+
+        }`;
+
+
+        document.getElementById('modal').classList.add('open');
+
+    }
+
+    catch(e){
+
+        document.getElementById('modalContent').innerHTML=
+        '<div class="empty">Unable to open this email.</div>';
+
+        document.getElementById('modal').classList.add('open');
+
+    }
+
+}
+
+
+
+/* ============================= */
+/* CLOSE MODAL */
+/* ============================= */
+
+function closeModal(){
+
+    document.getElementById('modal').classList.remove('open');
+
+}
+
+
+
+/* ============================= */
+/* DEMO EMAIL */
+/* ============================= */
+
+async function addDemo(){
+
+    let samples=[
+
+        [
+
+            'faculty@college.edu',
+
+            'Exam timetable and assignment deadline',
+
+            'The exam timetable is released. Assignment deadline is Friday.'
+
+        ],
+
+
+        [
+
+            'offers@shop.com',
+
+            'Congratulations! You won a prize',
+
+            'Urgent! Claim now your free money prize by clicking here.'
+
+        ],
+
+
+        [
+
+            'team@company.com',
+
+            'Project meeting tomorrow',
+
+            'Please attend the project meeting tomorrow at 10 AM.'
+
+        ],
+
+
+        [
+
+            'friend@example.com',
+
+            'Lunch this weekend',
+
+            'Are you free for lunch this weekend?'
+
+        ]
+
+    ];
+
+
+    let s=samples[
+        Math.floor(Math.random()*samples.length)
+    ];
+
+
+    await api(
+
+        '/api/emails/demo',
+
+        {
+
+            method:'POST',
+
+            headers:{
+                'Content-Type':'application/json'
+            },
+
+            body:JSON.stringify({
+
+                sender:s[0],
+
+                recipient:'me@example.com',
+
+                subject:s[1],
+
+                body:s[2]
+
+            })
+
+        }
+
+    );
+
+
+    loadEmails();
+
+}
+
+
+
+/* ============================= */
+/* UPLOAD EMAIL */
+/* ============================= */
+
+function openUpload(){
+
+    document.getElementById('modalContent').innerHTML=
+
+
+    `<h2>Upload an email</h2>
+
+
+    <p class="small">
+
+    Choose a real <b>.eml</b> email file.
+
+    The Java backend will parse and analyze it automatically.
+
+    </p>
+
+
+    <div class="upload">
+
+    <input
+    type="file"
+    id="file"
+    accept=".eml"
+    >
+
+    </div>
+
+
+    <br>
+
+
+    <button
+    class="btn"
+    onclick="upload()"
+    >
+    Analyze Email
+    </button>`;
+
+
+    document.getElementById('modal').classList.add('open');
+
+}
+
+
+
+async function upload(){
+
+    let f=document.getElementById('file').files[0];
+
+
+    if(!f)
+
+        return alert('Choose an .eml file');
+
+
+    let fd=new FormData();
+
+    fd.append('file',f);
+
+
+    try{
+
+        await api(
+
+            '/api/emails/upload',
+
+            {
+                method:'POST',
+                body:fd
+            }
+
+        );
+
+
+        closeModal();
+
+        loadEmails();
+
+    }
+
+    catch(e){
+
+        alert('Unable to upload email.');
+
+    }
+
+}
+
+
+
+/* ============================= */
+/* SPAM / DUPLICATES */
+/* ============================= */
+
+async function filterView(type){
+
+    if(!emails.length)
+
+        await loadEmails();
+
+
+    let x=
+
+        type==='spam'
+
+        ?
+
+        emails.filter(e=>e.spam)
+
+        :
+
+        emails.filter(e=>e.duplicate);
+
+
+    document.getElementById('panelTitle').textContent=
+
+        type==='spam'
+
+        ?
+
+        '🚨 Spam Detection'
+
+        :
+
+        '♻️ Duplicate Emails';
+
+
+    document.getElementById('panelSubtitle').textContent=
+
+        type==='spam'
+
+        ?
+
+        'HashMap keyword analysis'
+
+        :
+
+        'Rabin-Karp rolling hash';
+
+
+    document.getElementById('pageTitle').textContent=
+
+        type==='spam'
+
+        ?
+
+        'Spam Detection'
+
+        :
+
+        'Duplicate Emails';
+
+
+    document.getElementById('pageSubtitle').textContent=
+
+        type==='spam'
+
+        ?
+
+        'HashMap keyword analysis'
+
+        :
+
+        'Rabin-Karp rolling hash';
+
+
+    render(x);
+
+
+    setActiveButton(
+
+        type==='spam'
+
+        ?
+
+        'Spam'
+
+        :
+
+        'Duplicates'
+
+    );
+
+}
+
+
+
+/* ============================= */
+/* PRIORITY PREDICTION */
+/* ============================= */
+
+function sortPriority(){
+
+    if(!emails.length){
+
+        document.getElementById('list').innerHTML=
+        '<div class="empty">No emails available for priority analysis.</div>';
+
+        return;
+
+    }
+
+
+    let sorted=[...emails].sort(
+        (a,b)=>b.priority-a.priority
+    );
+
+
+    document.getElementById('panelTitle').textContent=
+        '⚡ Priority Prediction';
+
+    document.getElementById('panelSubtitle').textContent=
+        'Heap / Priority Queue ranking';
+
+
+    document.getElementById('pageTitle').textContent=
+        'Priority Prediction';
+
+    document.getElementById('pageSubtitle').textContent=
+        'Emails ranked using Heap / Priority Queue';
+
+
+    let priorityHTML=`
+
+
+    <div class="priority-header">
+
+
+        <div class="priority-header-title">
+
+            ⚡ Priority Prediction
+
+        </div>
+
+
+        <div class="priority-header-sub">
+
+            Emails ranked from highest to lowest priority using
+            Priority Queue / Heap logic.
+
+        </div>
+
+
+    </div>
+
+
+    <div class="priority-explanation">
+
+
+        <div class="priority-explanation-title">
+
+            How Priority Ranking Works
+
+        </div>
+
+
+        <div class="small">
+
+            Each email receives a priority score from 0 to 100.
+            The highest-priority email is placed first.
+            This demonstrates the Heap / Priority Queue concept.
+
+        </div>
+
+
+    </div>
+
+
+    `;
+
+
+    priorityHTML+=sorted.map((e,index)=>{
+
+
+        let level=
+
+            e.priority>=80
+
+            ?
+
+            'HIGH PRIORITY'
+
+            :
+
+            e.priority>=50
+
+            ?
+
+            'MEDIUM PRIORITY'
+
+            :
+
+            'LOW PRIORITY';
+
+
+        let levelClass=
+
+            e.priority>=80
+
+            ?
+
+            'high'
+
+            :
+
+            e.priority>=50
+
+            ?
+
+            'medium'
+
+            :
+
+            'low';
+
+
+        return `
+
+
+        <div
+        class="email"
+        onclick="openEmail('${e.id}')"
+        >
+
+
+            <div
+            style="
+            display:flex;
+            align-items:center;
+            gap:14px;
+            "
+            >
+
+
+                <div class="priority-rank">
+                    ${index+1}
+                </div>
+
+
+                <div
+                style="
+                flex:1;
+                min-width:0;
+                "
+                >
+
+
+                    <div class="sender">
+                        ${esc(e.sender)}
+                    </div>
+
+
+                    <div class="subject">
+                        ${esc(e.subject)}
+                    </div>
+
+
+                    <div class="preview">
+                        ${esc(e.body||'')}
+                    </div>
+
+
+                    <div class="chips">
+
+
+                        <span class="chip">
+                            ${esc(e.category)}
+                        </span>
+
+
+                        ${
+                            e.spam
+                            ?
+                            '<span class="chip red">SPAM</span>'
+                            :
+                            ''
+                        }
+
+
+                        ${
+                            e.duplicate
+                            ?
+                            '<span class="chip orange">DUPLICATE</span>'
+                            :
+                            ''
+                        }
+
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="priority-score">
+
+
+                    <div
+                    style="
+                    font-size:18px;
+                    font-weight:800;
+                    "
+                    >
+
+                        ${e.priority}/100
+
+                    </div>
+
+
+                    <div class="priority-bar">
+
+
+                        <div
+                        class="priority-fill"
+                        style="
+                        width:${Math.max(0,Math.min(100,e.priority))}%
+                        "
+                        ></div>
+
+
+                    </div>
+
+
+                    <div class="priority-level ${levelClass}">
+
+                        ${level}
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+        `;
+
+    }).join('');
+
+
+    document.getElementById('list').innerHTML=
+        priorityHTML;
+
+
+    setActiveButton('Priority');
+
+}
+
+
+
+/* ============================= */
+/* RECOMMENDATIONS */
+/* ============================= */
+
+async function showRecommendations(){
+
+    if(!emails.length)
+        await loadEmails();
+
+
+    if(!emails.length){
+
+        document.getElementById('list').innerHTML=
+        '<div class="empty">No emails available for recommendations.</div>';
+
+        return;
+
+    }
+
+
+    let recommended=[];
+
+
+    /*
+       Get similarity-based recommendations.
+       The backend uses DP similarity and LRU caching.
+    */
+
+    for(let e of emails){
+
+        try{
+
+            let sim=await api(
+                '/api/emails/'+e.id+'/similar'
+            );
+
+
+            sim.forEach(x=>{
+
+                if(!recommended.some(r=>r.id===x.id))
+
+                    recommended.push(x);
+
+            });
+
+        }
+
+        catch(err){}
+
+    }
+
+
+    document.getElementById('panelTitle').textContent=
+        '💡 Recommended Emails';
+
+    document.getElementById('panelSubtitle').textContent=
+        'LRU Cache + HashMap';
+
+
+    document.getElementById('pageTitle').textContent=
+        'Recommendations';
+
+    document.getElementById('pageSubtitle').textContent=
+        'DP similarity results cached with LRU';
+
+
+    if(!recommended.length){
+
+        document.getElementById('list').innerHTML=
+
+        `<div class="empty">
+
+            No recommendations available yet.
+
+            <br><br>
+
+            Open or upload more related emails to build recommendations.
+
+        </div>`;
+
+
+        setActiveButton('Recommendations');
+
+        return;
+
+    }
+
+
+    document.getElementById('list').innerHTML=
+
+    `
+
+    <div class="recommendation-header">
+
+        <div class="recommendation-title">
+
+            💡 Recommended Emails
+
+        </div>
+
+
+        <div class="recommendation-sub">
+
+            Based on email similarity using Dynamic Programming
+            and cached using LRU Cache.
+
+        </div>
+
+    </div>
+
+
+    ${
+        recommended.map(e=>`
+
+            <div
+            class="email"
+            onclick="openEmail('${e.id}')"
+            >
+
+                <div class="sender">
+
+                    ${esc(e.sender)}
+
+                </div>
+
+
+                <div class="subject">
+
+                    ${esc(e.subject)}
+
+                </div>
+
+
+                <div class="preview">
+
+                    ${esc(e.body||'')}
+
+                </div>
+
+
+                <div class="chips">
+
+                    <span class="chip">
+
+                        ${esc(e.category)}
+
+                    </span>
+
+
+                    <span class="chip green">
+
+                        RECOMMENDED
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        `).join('')
+    }
+
+    `;
+
+
+    setActiveButton('Recommendations');
+
+}
+
+
+
+/* ============================= */
+/* ACTIVE SIDEBAR BUTTON */
+/* ============================= */
+
+function setActiveButton(name){
+
+    let buttons=document.querySelectorAll('.nav button');
+
+
+    buttons.forEach(button=>{
+
+        button.classList.remove('active');
+
+
+        if(button.textContent.includes(name))
+
+            button.classList.add('active');
+
+    });
+
+}
+
+
+
+/* ============================= */
+/* CONTACT NETWORK */
+/* ============================= */
+
+async function showNetwork(){
+
+    let email=prompt(
+        'Enter a sender email to analyze, e.g. faculty@college.edu'
+    );
+
+
+    if(!email)
+        return;
+
+
+    try{
+
+        let n=await api(
+            '/api/emails/network?email='+
+            encodeURIComponent(email)
+        );
+
+
+        let nodes=[];
+
+
+        [...(n.bfs||[]),...(n.dfs||[])].forEach(x=>{
+
+            if(!nodes.includes(x))
+                nodes.push(x);
+
+        });
+
+
+        if(!nodes.length){
+
+            document.getElementById('modalContent').innerHTML=
+
+            `<h2>Contact Network</h2>
+
+            <div class="empty">
+
+            No connection found for
+
+            <b>${esc(email)}</b>
+
+            </div>`;
+
+
+            document.getElementById('modal').classList.add('open');
+
+            return;
+
+        }
+
+
+        let visualNodes=nodes.slice(0,8);
+
+
+        let positions=[
+
+            [250,20],
+
+            [40,100],
+
+            [460,100],
+
+            [150,190],
+
+            [350,190],
+
+            [40,280],
+
+            [460,280],
+
+            [250,280]
+
+        ];
+
+
+        let nodeHTML='';
+
+
+        visualNodes.forEach((node,i)=>{
+
+            let cls='network-node';
+
+
+            if(node===email)
+
+                cls+=' start';
+
+            else if(i===0)
+
+                cls+=' center';
+
+
+            nodeHTML+=`
+
+            <div
+            class="${cls}"
+            style="
+            left:${positions[i][0]}px;
+            top:${positions[i][1]}px;
+            "
+            >
+
+            ${esc(node)}
+
+            </div>`;
+
+        });
+
+
+        let lines='';
+
+
+        let sequence=(n.bfs||[]).filter(
+            x=>visualNodes.includes(x)
+        );
+
+
+        for(let i=0;i<sequence.length-1;i++){
+
+            let a=visualNodes.indexOf(sequence[i]);
+
+            let b=visualNodes.indexOf(sequence[i+1]);
+
+
+            if(a<0 || b<0)
+                continue;
+
+
+            let x1=positions[a][0]+72;
+
+            let y1=positions[a][1]+28;
+
+            let x2=positions[b][0]+72;
+
+            let y2=positions[b][1]+28;
+
+
+            let dx=x2-x1;
+
+            let dy=y2-y1;
+
+
+            let length=Math.sqrt(dx*dx+dy*dy);
+
+            let angle=Math.atan2(dy,dx)*180/Math.PI;
+
+
+            lines+=`
+
+            <div
+            class="network-line"
+            style="
+            left:${x1}px;
+            top:${y1}px;
+            width:${length}px;
+            transform:rotate(${angle}deg);
+            "
+            ></div>`;
+
+        }
+
+
+        document.getElementById('modalContent').innerHTML=
+
+        `<h2>🕸 Contact Network</h2>
+
+
+        <p class="small">
+
+        Graph analysis starting from
+
+        <b>${esc(email)}</b>
+
+        </p>
+
+
+        <div class="network-summary">
+
+
+            <div class="network-stat">
+
+
+                <div class="small">
+                VERTICES
+                </div>
+
+
+                <div class="number">
+                ${n.vertices}
+                </div>
+
+
+                <div class="small">
+                Unique contacts
+                </div>
+
+
+            </div>
+
+
+            <div class="network-stat">
+
+
+                <div class="small">
+                CONNECTIONS
+                </div>
+
+
+                <div class="number">
+                ${n.edges}
+                </div>
+
+
+                <div class="small">
+                Email relationships
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="network-area">
+
+
+            <div class="network-title">
+
+            Email Relationship Graph
+
+            </div>
+
+
+            <div class="network-graph">
+
+                ${lines}
+
+                ${nodeHTML}
+
+            </div>
+
+
+        </div>
+
+
+        <div class="network-legend">
+
+
+            <div class="legend-item">
+
+                <span class="legend-dot legend-green"></span>
+
+                Starting Contact
+
+            </div>
+
+
+            <div class="legend-item">
+
+                <span class="legend-dot legend-blue"></span>
+
+                Contact
+
+            </div>
+
+
+            <div class="legend-item">
+
+                <span class="legend-dot legend-purple"></span>
+
+                Network Node
+
+            </div>
+
+
+        </div>
+
+
+        <div class="traversal">
+
+
+            <h3>
+            Graph Traversal
+            </h3>
+
+
+            <div class="traversal-box">
+
+
+                <div class="traversal-label bfs-label">
+
+                BFS — Breadth-First Search
+
+                </div>
+
+
+                ${
+                    (n.bfs||[]).join(' → ')
+                    ||
+                    'No connection found'
+                }
+
+
+            </div>
+
+
+            <div class="traversal-box">
+
+
+                <div class="traversal-label dfs-label">
+
+                DFS — Depth-First Search
+
+                </div>
+
+
+                ${
+                    (n.dfs||[]).join(' → ')
+                    ||
+                    'No connection found'
+                }
+
+
+            </div>
+
+
+        </div>`;
+
+
+        document.getElementById('modal').classList.add('open');
+
+
+        setActiveButton('Contact Network');
+
+
+    }
+
+
+    catch(e){
+
+        document.getElementById('modalContent').innerHTML=
+
+        `<h2>Contact Network</h2>
+
+
+        <div class="empty">
+
+        Unable to load the contact network.
+
+
+        <br><br>
+
+
+        Make sure the Spring Boot backend is running.
+
+        </div>`;
+
+
+        document.getElementById('modal').classList.add('open');
+
+    }
+
+}
+
+
+
+/* ============================= */
+/* START APPLICATION */
+/* ============================= */
+
+loadEmails();
+
+</script>
+
+
+</body>
+
+</html>
+```
