@@ -5,6 +5,7 @@ WORKDIR /app
 
 COPY backend/pom.xml pom.xml
 COPY backend/src src
+COPY inbox /inbox
 
 RUN mvn -DskipTests package
 
@@ -13,6 +14,7 @@ FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /inbox /inbox
 
 EXPOSE 8080
 
